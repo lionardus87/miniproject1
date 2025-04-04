@@ -41,14 +41,29 @@
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 							>
-								Dropdown
+								Category
 							</a>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#">Action</a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
+								<li>
+									<a class="dropdown-item" data-category="utilities"
+										>Utilities</a
+									>
+								</li>
+								<li>
+									<a class="dropdown-item" data-category="entertainment"
+										>Entertainment</a
+									>
+								</li>
+								<li>
+									<a class="dropdown-item" data-category="groceries"
+										>Groceries</a
+									>
+								</li>
 								<li><hr class="dropdown-divider" /></li>
 								<li>
-									<a class="dropdown-item" href="#">Something else here</a>
+									<a class="dropdown-item" data-category="allCategories"
+										>All Categories</a
+									>
 								</li>
 							</ul>
 						</li>
@@ -56,8 +71,25 @@
 							<a class="nav-link disabled" aria-disabled="true">Disabled</a>
 						</li>
 					</ul>
-					<form class="d-flex" role="search">
+					<form
+						class="d-flex"
+						role="search"
+						onsubmit="event.preventDefault(); searchExpense()"
+					>
+						<select
+							id="sortOptions"
+							class="form-select w-auto"
+							onchange="sortExpenses()"
+						>
+							<option value="default">Sort By</option>
+							<option value="price-low-high">Price: Low to High</option>
+							<option value="price-high-low">Price: High to Low</option>
+							<option value="title-asc">Title: A to Z</option>
+							<option value="title-desc">Title: Z to A</option>
+						</select>
+
 						<input
+							id="searchInput"
 							class="form-control me-2"
 							type="search"
 							placeholder="Search"
@@ -76,13 +108,23 @@
 				<thead class="table-dark">
 					<tr>
 						<th scope="col">No</th>
+						<th scope="col">Date</th>
 						<th scope="col">Title</th>
-						<th scope="col">Desc</th>
-						<th scope="col">CreatedAt</th>
+						<th scope="col">Description</th>
 						<th scope="col">Amount</th>
+						<th scope="col">Category</th>
+						<th scope="col">Paid</th>
+						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody id="expensesContainer"></tbody>
+				<tfoot>
+					<tr class="table-secondary">
+						<td colspan="4"><strong>Total</strong></td>
+						<td id="totalUnpaid" colspan="1">$0</td>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 
@@ -91,13 +133,23 @@
 				<thead class="table-dark">
 					<tr>
 						<th scope="col">No</th>
-						<th scope="col">Title</th>
-						<th scope="col">Desc</th>
 						<th scope="col">Date</th>
+						<th scope="col">Title</th>
+						<th scope="col">Description</th>
 						<th scope="col">Amount</th>
+						<th scope="col">Category</th>
+						<th scope="col">Paid</th>
+						<th scope="col">Action</th>
 					</tr>
 				</thead>
-				<tbody id="completedContainer"></tbody>
+				<tbody id="paidContainer"></tbody>
+				<tfoot>
+					<tr class="table-secondary">
+						<td colspan="4"><strong>Total</strong></td>
+						<td id="totalPaid" colspan="1">$0</td>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 
@@ -105,19 +157,24 @@
 		<template id="expensesList">
 			<tr>
 				<th id="id"></th>
+				<td id="date"></td>
 				<td id="title"></td>
 				<td id="desc"></td>
-				<td id="date"></td>
+
 				<td id="amount"></td>
-				<td><button>Update</button> <button id="delExpense">Delete</button></td>
+				<td id="category"></td>
 				<td>
 					<input
 						class="form-check-input mt-0"
-						id="todoComplete"
+						id="paidExpense"
 						type="checkbox"
 						value=""
 						aria-label="Checkbox for following text input"
 					/>
+				</td>
+				<td>
+					<button id="editExpense">Update</button>
+					<button id="delExpense">Delete</button>
 				</td>
 			</tr>
 		</template>
@@ -125,7 +182,7 @@
 		<!-- new expenses query -->
 		<div
 			class="modal fade"
-			id="exampleModal"
+			id="expenseModal"
 			tabindex="-1"
 			aria-labelledby="exampleModalLabel"
 		>
@@ -153,6 +210,19 @@
 							<div class="mb-3">
 								<label for="desc" class="form-label">Amount</label>
 								<input type="text" class="form-control" id="formAmount" />
+							</div>
+							<div class="mb-3">
+								<label for="desc" class="form-label">Category</label>
+								<select
+									class="form-select"
+									id="formCategory"
+									aria-label="Default select example"
+								>
+									<option selected>Category</option>
+									<option value="Utilities">Utilities</option>
+									<option value="Entertainment">Entertainment</option>
+									<option value="Groceries">Groceries</option>
+								</select>
 							</div>
 						</form>
 					</div>
