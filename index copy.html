@@ -13,13 +13,7 @@
 	<body>
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="index.html"
-					><img
-						src="./images/ExpenseTrackerLogo.jpg"
-						alt="Expense Tracker Logo"
-						class="rounded-circle"
-						height="60px"
-				/></a>
+				<a class="navbar-brand" href="#">Logo</a>
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -34,7 +28,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="index.html"
+							<a class="nav-link" aria-current="page" href="index.html"
 								>Expenses</a
 							>
 						</li>
@@ -42,7 +36,7 @@
 							<a class="nav-link" href="summary.html">Summary</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="chart.html">Chart</a>
+							<a class="nav-link active" href="chart.html">Chart</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a
@@ -113,57 +107,84 @@
 				</div>
 			</div>
 		</nav>
-
-		<!-- New Expense Query Button -->
-		<div class="row mt-3 mb-4 text-start">
-			<div class="col">
-				<button
-					type="button"
-					class="btn btn-primary m-4"
-					onclick="newExpense()"
-				>
-					New Expense
-				</button>
-			</div>
+		<!-- Expenses Table -->
+		<div class="container mt-4">
+			<table class="table table-bordered text-center">
+				<thead class="table-dark">
+					<tr>
+						<th scope="col">No</th>
+						<th scope="col">Date</th>
+						<th scope="col">Title</th>
+						<th scope="col">Description</th>
+						<th scope="col">Amount</th>
+						<th scope="col">Category</th>
+						<th scope="col">Paid</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody id="expensesContainer"></tbody>
+				<tfoot>
+					<tr class="table-secondary">
+						<td colspan="4"><strong>Total</strong></td>
+						<td id="totalUnpaid" colspan="1">$0</td>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
+			</table>
 		</div>
 
-		<!-- Expenses List -->
-		<div class="container mt-4" id="expensesContainer"></div>
+		<div class="container">
+			<table class="table table-bordered text-center">
+				<thead class="table-dark">
+					<tr>
+						<th scope="col">No</th>
+						<th scope="col">Date</th>
+						<th scope="col">Title</th>
+						<th scope="col">Description</th>
+						<th scope="col">Amount</th>
+						<th scope="col">Category</th>
+						<th scope="col">Paid</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody id="paidContainer"></tbody>
+				<tfoot>
+					<tr class="table-secondary">
+						<td colspan="4"><strong>Total</strong></td>
+						<td id="totalPaid" colspan="1">$0</td>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
 
 		<!-- Template -->
 		<template id="expensesList">
-			<div class="card mb-2 shadow-sm col-2">
-				<div class="card-body">
-					<h5 class="card-title mb-1" id="title">Expense Title</h5>
-					<p class="mb-1"><strong>ID:</strong> <span id="id">1</span></p>
-					<p class="mb-1">
-						<strong>Date:</strong> <span id="date">2025-04-05</span>
-					</p>
-					<p class="mb-1">
-						<strong>Description:</strong> <span id="desc">Some desc</span>
-					</p>
-					<p class="mb-1">
-						<strong>Category:</strong> <span id="category">Groceries</span>
-					</p>
-					<p class="mb-1">
-						<strong>Amount:</strong> $<span id="amount">0.00</span>
-					</p>
-					<p class="mb-2">
-						<strong>Paid:</strong> <input type="checkbox" id="paidExpense" />
-					</p>
-					<div class="d-flex justify-content-end gap-2">
-						<button class="btn btn-sm btn-outline-primary" id="editExpense">
-							Update
-						</button>
-						<button class="btn btn-sm btn-outline-danger" id="delExpense">
-							Delete
-						</button>
-					</div>
-				</div>
-			</div>
+			<tr>
+				<th id="id"></th>
+				<td id="date"></td>
+				<td id="title"></td>
+				<td id="desc"></td>
+
+				<td id="amount"></td>
+				<td id="category"></td>
+				<td>
+					<input
+						class="form-check-input mt-0"
+						id="paidExpense"
+						type="checkbox"
+						value=""
+						aria-label="Checkbox for following text input"
+					/>
+				</td>
+				<td>
+					<button id="editExpense">Update</button>
+					<button id="delExpense">Delete</button>
+				</td>
+			</tr>
 		</template>
 
-		<!-- New Expenses Query -->
+		<!-- new expenses query -->
 		<div
 			class="modal fade"
 			id="expenseModal"
@@ -227,6 +248,13 @@
 						</button>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row mt-3 mb-4 text-center">
+			<div class="col">
+				<button type="button" class="btn btn-primary" onclick="newExpense()">
+					New Expense
+				</button>
 			</div>
 		</div>
 	</body>

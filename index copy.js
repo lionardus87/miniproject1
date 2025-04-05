@@ -149,113 +149,62 @@ function sortExpenses() {
 	countExpenses(sortedExpenses);
 }
 
-// function countExpenses(filteredExpenses = expenses) {
-// 	document.getElementById("expensesContainer").innerHTML = null;
-// 	document.getElementById("paidContainer").innerHTML = null;
-// 	totalPaid = 0;
-// 	totalUnpaid = 0;
+function countExpenses(filteredExpenses = expenses) {
+	document.getElementById("expensesContainer").innerHTML = null;
+	document.getElementById("paidContainer").innerHTML = null;
+	totalPaid = 0;
+	totalUnpaid = 0;
 
-// 	filteredExpenses.forEach((expense) => {
-// 		if (expense) {
-// 			const template = document
-// 				.getElementById("expensesList")
-// 				.content.cloneNode(true);
-// 			template.getElementById("id").innerText = expense.id;
-// 			template.getElementById("title").innerHTML = expense.issued
-// 				? `<del>${expense.title}</del>`
-// 				: expense.title;
-// 			template.getElementById("desc").innerHTML = expense.issued
-// 				? `<del>${expense.title}</del>`
-// 				: expense.desc;
-// 			template.getElementById("amount").innerHTML = expense.issued
-// 				? `<del>$${expense.amount}</del>`
-// 				: `$${expense.amount}`;
-// 			template.getElementById("date").innerText = expense.issued
-// 				? expense.paidOn
-// 				: expense.date;
+	filteredExpenses.forEach((expense) => {
+		if (expense) {
+			const template = document
+				.getElementById("expensesList")
+				.content.cloneNode(true);
+			template.getElementById("id").innerText = expense.id;
+			template.getElementById("title").innerHTML = expense.issued
+				? `<del>${expense.title}</del>`
+				: expense.title;
+			template.getElementById("desc").innerHTML = expense.issued
+				? `<del>${expense.title}</del>`
+				: expense.desc;
+			template.getElementById("amount").innerHTML = expense.issued
+				? `<del>$${expense.amount}</del>`
+				: `$${expense.amount}`;
+			template.getElementById("date").innerText = expense.issued
+				? expense.paidOn
+				: expense.date;
 
-// 			template.getElementById("category").innerText = expense.category;
+			template.getElementById("category").innerText = expense.category;
 
-// 			//Check box
-// 			template.getElementById("paidExpense").checked = expense.issued;
-// 			template
-// 				.getElementById("paidExpense")
-// 				.addEventListener("click", () => paidExpense(expense.id));
+			//Check box
+			template.getElementById("paidExpense").checked = expense.issued;
+			template
+				.getElementById("paidExpense")
+				.addEventListener("click", () => paidExpense(expense.id));
 
-// 			//delete button
-// 			template.getElementById("delExpense").addEventListener("click", () => {
-// 				deleteExpense(expense.id);
-// 			});
-// 			//update button
-// 			template
-// 				.querySelector("button")
-// 				.addEventListener("click", () => newExpense(expense.id));
+			//delete button
+			template.getElementById("delExpense").addEventListener("click", () => {
+				deleteExpense(expense.id);
+			});
+			//update button
+			template
+				.querySelector("button")
+				.addEventListener("click", () => newExpense(expense.id));
 
-// 			if (expense.issued) {
-// 				totalPaid += parseFloat(expense.amount);
-// 				document.getElementById("paidContainer").appendChild(template);
-// 			} else {
-// 				totalUnpaid += parseFloat(expense.amount);
-// 				document.getElementById("expensesContainer").appendChild(template);
-// 			}
-// 		}
-// 	});
-// 	document.getElementById("totalUnpaid").innerText = `$${totalUnpaid.toFixed(
-// 		2
-// 	)}`;
-// 	document.getElementById("totalPaid").innerText = `$${totalPaid.toFixed(2)}`;
-// }
-
-function countExpenses(data = expenses) {
-	const container = document.getElementById("expensesContainer");
-	container.innerHTML = "";
-
-	data.forEach((expense) => {
-		const template = document
-			.getElementById("expensesList")
-			.content.cloneNode(true);
-
-		template.getElementById("id").textContent = expense.id;
-		template.getElementById("title").textContent = expense.title;
-		template.getElementById("date").textContent = expense.date;
-		template.getElementById("desc").textContent = expense.desc;
-		template.getElementById("amount").textContent = parseFloat(
-			expense.amount
-		).toFixed(2);
-		template.getElementById("category").textContent = expense.category;
-
-		const checkbox = template.getElementById("paidExpense");
-		checkbox.checked = expense.issued;
-		checkbox.addEventListener("click", () => paidExpense(expense.id));
-
-		template
-			.getElementById("editExpense")
-			.addEventListener("click", () => newExpense(expense.id));
-		template
-			.getElementById("delExpense")
-			.addEventListener("click", () => deleteExpense(expense.id));
-
-		container.appendChild(template);
+			if (expense.issued) {
+				totalPaid += parseFloat(expense.amount);
+				document.getElementById("paidContainer").appendChild(template);
+			} else {
+				totalUnpaid += parseFloat(expense.amount);
+				document.getElementById("expensesContainer").appendChild(template);
+			}
+		}
 	});
+	document.getElementById("totalUnpaid").innerText = `$${totalUnpaid.toFixed(
+		2
+	)}`;
+	document.getElementById("totalPaid").innerText = `$${totalPaid.toFixed(2)}`;
 }
+
 countExpenses();
 filterCategory();
-
-fetch("http://localhost:5500/api/expenses", {
-	method: "POST",
-	headers: { "Content-Type": "application/json" },
-	body: JSON.stringify(expenses),
-})
-	.then((res) => {
-		if (!res.ok) {
-			throw new Error(`HTTP error! status: ${res.status}`);
-		}
-		return res.json();
-	})
-	.then((data) => {
-		console.log("Saved successfully:", data);
-	})
-	.catch((err) => {
-		console.error("Error saving expenses:", err.message);
-	});
-console.log(expenses);
