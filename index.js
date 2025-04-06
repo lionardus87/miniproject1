@@ -1,4 +1,4 @@
-const expenses = [];
+let expenses = [];
 
 const myModal = new bootstrap.Modal(document.getElementById("expenseModal"));
 let editId = null;
@@ -57,7 +57,7 @@ function saveExpenses() {
 		};
 		expenses.push(expense);
 	}
-
+	localStorage.setItem("expenses", JSON.stringify(expenses));
 	myModal.hide();
 	countExpenses();
 }
@@ -238,24 +238,19 @@ function countExpenses(data = expenses) {
 		container.appendChild(template);
 	});
 }
-countExpenses();
-filterCategory();
 
-fetch("http://localhost:5500/api/expenses", {
-	method: "POST",
-	headers: { "Content-Type": "application/json" },
-	body: JSON.stringify(expenses),
-})
-	.then((res) => {
-		if (!res.ok) {
-			throw new Error(`HTTP error! status: ${res.status}`);
-		}
-		return res.json();
-	})
-	.then((data) => {
-		console.log("Saved successfully:", data);
-	})
-	.catch((err) => {
-		console.error("Error saving expenses:", err.message);
-	});
-console.log(expenses);
+window.onload = () => {
+	countExpenses();
+	filterCategory();
+};
+const storedExpenses = localStorage.getItem("expenses");
+if (storedExpenses) {
+	expenses = JSON.parse(storedExpenses);
+}
+window.addEventListener("beforeunload", () => {
+	document.getElementById("expensesContainer").innerHTML = "";
+	document.getElementById("paidContainer").innerHTML = "";
+
+	document.getElementById("totalUnpaid").innerText = "$0.00";
+	document.getElementById("totalPaid").innerText = "$0.00";
+});

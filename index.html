@@ -128,36 +128,40 @@
 		</div>
 
 		<!-- Expenses List -->
-		<div class="container mt-4" id="expensesContainer"></div>
+		<div class="container mt-4">
+			<div class="row" id="expensesContainer"></div>
+		</div>
 
 		<!-- Template -->
 		<template id="expensesList">
-			<div class="card mb-2 shadow-sm col-2">
-				<div class="card-body">
-					<h5 class="card-title mb-1" id="title">Expense Title</h5>
-					<p class="mb-1"><strong>ID:</strong> <span id="id">1</span></p>
-					<p class="mb-1">
-						<strong>Date:</strong> <span id="date">2025-04-05</span>
-					</p>
-					<p class="mb-1">
-						<strong>Description:</strong> <span id="desc">Some desc</span>
-					</p>
-					<p class="mb-1">
-						<strong>Category:</strong> <span id="category">Groceries</span>
-					</p>
-					<p class="mb-1">
-						<strong>Amount:</strong> $<span id="amount">0.00</span>
-					</p>
-					<p class="mb-2">
-						<strong>Paid:</strong> <input type="checkbox" id="paidExpense" />
-					</p>
-					<div class="d-flex justify-content-end gap-2">
-						<button class="btn btn-sm btn-outline-primary" id="editExpense">
-							Update
-						</button>
-						<button class="btn btn-sm btn-outline-danger" id="delExpense">
-							Delete
-						</button>
+			<div class="card mb-2 col-2">
+				<div class="card h-100">
+					<div class="card-body d-flex flex-column justify-content-between">
+						<h5 class="card-title mb-1" id="title">Expense Title</h5>
+						<p class="mb-1"><strong>ID:</strong> <span id="id">1</span></p>
+						<p class="mb-1">
+							<strong>Date:</strong> <span id="date">2025-04-05</span>
+						</p>
+						<p class="mb-1">
+							<strong>Description:</strong> <span id="desc">Some desc</span>
+						</p>
+						<p class="mb-1">
+							<strong>Category:</strong> <span id="category">Groceries</span>
+						</p>
+						<p class="mb-1">
+							<strong>Amount:</strong> $<span id="amount">0.00</span>
+						</p>
+						<p class="mb-2">
+							<strong>Paid:</strong> <input type="checkbox" id="paidExpense" />
+						</p>
+						<div class="d-flex justify-content-end gap-2 mt-auto">
+							<button class="btn btn-sm btn-outline-primary" id="editExpense">
+								Update
+							</button>
+							<button class="btn btn-sm btn-outline-danger" id="delExpense">
+								Delete
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

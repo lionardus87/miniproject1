@@ -157,6 +157,97 @@
 				</tfoot>
 			</table>
 		</div>
+		<template id="expensesList">
+			<tr>
+				<th id="id"></th>
+				<td id="date"></td>
+				<td id="title"></td>
+				<td id="desc"></td>
+
+				<td id="amount"></td>
+				<td id="category"></td>
+				<td>
+					<input
+						class="form-check-input mt-0"
+						id="paidExpense"
+						type="checkbox"
+						value=""
+						aria-label="Checkbox for following text input"
+					/>
+				</td>
+				<td>
+					<button id="editExpense">Update</button>
+					<button id="delExpense">Delete</button>
+				</td>
+			</tr>
+		</template>
+
+		<!-- Modal to edit expense -->
+		<div
+			class="modal fade"
+			id="expenseModal"
+			tabindex="-1"
+			aria-labelledby="exampleModalLabel"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">Expenses</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<form id="todoForm">
+							<div class="mb-3">
+								<label for="title" class="form-label">Title</label>
+								<input type="text" class="form-control" id="formTitle" />
+							</div>
+							<div class="mb-3">
+								<label for="desc" class="form-label">Description</label>
+								<input type="text" class="form-control" id="formDesc" />
+							</div>
+							<div class="mb-3">
+								<label for="desc" class="form-label">Amount</label>
+								<input type="text" class="form-control" id="formAmount" />
+							</div>
+							<div class="mb-3">
+								<label for="desc" class="form-label">Category</label>
+								<select
+									class="form-select"
+									id="formCategory"
+									aria-label="Default select example"
+								>
+									<option selected>Category</option>
+									<option value="Utilities">Utilities</option>
+									<option value="Entertainment">Entertainment</option>
+									<option value="Groceries">Groceries</option>
+								</select>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							data-bs-dismiss="modal"
+						>
+							Close
+						</button>
+						<button
+							type="button"
+							class="btn btn-primary"
+							onclick="saveExpenses()"
+						>
+							Save
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="summary.js"></script>
