@@ -238,11 +238,20 @@ function countExpenses(data = expenses) {
 		container.appendChild(template);
 	});
 }
-
+// countExpenses()
+// filterCategory()
 window.onload = () => {
 	countExpenses();
 	filterCategory();
+	fetch("http://localhost:3000")
+		.then((response) => {
+			return response.json();
+		})
+		.then((data) => {
+			console.log(data);
+		});
 };
+
 const storedExpenses = localStorage.getItem("expenses");
 if (storedExpenses) {
 	expenses = JSON.parse(storedExpenses);
