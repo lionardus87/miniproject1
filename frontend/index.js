@@ -29,48 +29,68 @@ function saveExpenses() {
 	const desc = document.getElementById("formDesc").value;
 	const amount = document.getElementById("formAmount").value;
 	const category = document.getElementById("formCategory").value;
-	if (!title || !desc || !amount || !category) {
-		alert("All fields are required");
-		return;
-	}
-	if (editId !== null) {
-		const index = expenses.findIndex((exp) => exp.id === editId);
-		expenses[index].title = title;
-		expenses[index].desc = desc;
-		expenses[index].amount = amount;
-		expenses[index].category = category;
-	} else {
-		// Create new task
-		const id =
-			expenses.length === 0
-				? 1
-				: Math.max(...expenses.map((exp) => exp.id)) + 1;
-		const expense = {
-			id,
-			title,
-			desc,
-			amount,
-			category,
-			date: new Date().toLocaleString(),
-			issued: false,
-			paidOn: null,
-		};
-		expenses.push(expense);
-	}
-	localStorage.setItem("expenses", JSON.stringify(expenses));
+
+	fetch("http://localhost:3000/expenses/new", {
+		method: "POST",
+		body: JSON.stringify({ title, desc, amount, category }),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+		.then((result) => result.json())
+		.then((data) => {
+			expenses.push(data);
+			countExpenses();
+		});
+	// if (!title || !desc || !amount || !category) {
+	// 	alert("All fields are required");
+	// 	return;
+	// }
+	// if (editId !== null) {
+	// 	const index = expenses.findIndex((exp) => exp.id === editId);
+	// 	expenses[index].title = title;
+	// 	expenses[index].desc = desc;
+	// 	expenses[index].amount = amount;
+	// 	expenses[index].category = category;
+	// } else {
+	// 	// Create new task
+	// 	const id =
+	// 		expenses.length === 0
+	// 			? 1
+	// 			: Math.max(...expenses.map((exp) => exp.id)) + 1;
+	// 	const expense = {
+	// 		id,
+	// 		title,
+	// 		desc,
+	// 		amount,
+	// 		category,
+	// 		date: new Date().toLocaleString(),
+	// 		issued: false,
+	// 		paidOn: null,
+	// 	};
+	// 	expenses.push(expense);
+	// }
+	// localStorage.setItem("expenses", JSON.stringify(expenses));
 	myModal.hide();
 	countExpenses();
 }
 
 function deleteExpense(id) {
-	const index = expenses.findIndex((expense) => expense.id == id);
-	if (index != -1) {
-		expenses.splice(index, 1);
-	}
-	expenses.forEach((exp, index) => {
-		exp.id = index + 1;
+	fetch(`http://localhost:3000/expenses/${id}`, {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	}).then(() => {
+		const index = expenses.findIndex((expense) => expense.id == id);
+		if (index != -1) {
+			expenses.splice(index, 1);
+		}
+		expenses.forEach((exp, index) => {
+			exp.id = index + 1;
+		});
+		countExpenses();
 	});
-	countExpenses();
 }
 
 function paidExpense(id) {
@@ -149,63 +169,6 @@ function sortExpenses() {
 	countExpenses(sortedExpenses);
 }
 
-// function countExpenses(filteredExpenses = expenses) {
-// 	document.getElementById("expensesContainer").innerHTML = null;
-// 	document.getElementById("paidContainer").innerHTML = null;
-// 	totalPaid = 0;
-// 	totalUnpaid = 0;
-
-// 	filteredExpenses.forEach((expense) => {
-// 		if (expense) {
-// 			const template = document
-// 				.getElementById("expensesList")
-// 				.content.cloneNode(true);
-// 			template.getElementById("id").innerText = expense.id;
-// 			template.getElementById("title").innerHTML = expense.issued
-// 				? `<del>${expense.title}</del>`
-// 				: expense.title;
-// 			template.getElementById("desc").innerHTML = expense.issued
-// 				? `<del>${expense.title}</del>`
-// 				: expense.desc;
-// 			template.getElementById("amount").innerHTML = expense.issued
-// 				? `<del>$${expense.amount}</del>`
-// 				: `$${expense.amount}`;
-// 			template.getElementById("date").innerText = expense.issued
-// 				? expense.paidOn
-// 				: expense.date;
-
-// 			template.getElementById("category").innerText = expense.category;
-
-// 			//Check box
-// 			template.getElementById("paidExpense").checked = expense.issued;
-// 			template
-// 				.getElementById("paidExpense")
-// 				.addEventListener("click", () => paidExpense(expense.id));
-
-// 			//delete button
-// 			template.getElementById("delExpense").addEventListener("click", () => {
-// 				deleteExpense(expense.id);
-// 			});
-// 			//update button
-// 			template
-// 				.querySelector("button")
-// 				.addEventListener("click", () => newExpense(expense.id));
-
-// 			if (expense.issued) {
-// 				totalPaid += parseFloat(expense.amount);
-// 				document.getElementById("paidContainer").appendChild(template);
-// 			} else {
-// 				totalUnpaid += parseFloat(expense.amount);
-// 				document.getElementById("expensesContainer").appendChild(template);
-// 			}
-// 		}
-// 	});
-// 	document.getElementById("totalUnpaid").innerText = `$${totalUnpaid.toFixed(
-// 		2
-// 	)}`;
-// 	document.getElementById("totalPaid").innerText = `$${totalPaid.toFixed(2)}`;
-// }
-
 function countExpenses(data = expenses) {
 	const container = document.getElementById("expensesContainer");
 	container.innerHTML = "";
@@ -241,25 +204,25 @@ function countExpenses(data = expenses) {
 // countExpenses()
 // filterCategory()
 window.onload = () => {
-	countExpenses();
-	filterCategory();
-	fetch("http://localhost:3000")
+	fetch("http://localhost:3000/expenses")
 		.then((response) => {
 			return response.json();
 		})
 		.then((data) => {
-			console.log(data);
+			expenses = data;
+			countExpenses();
+			filterCategory();
 		});
 };
 
-const storedExpenses = localStorage.getItem("expenses");
-if (storedExpenses) {
-	expenses = JSON.parse(storedExpenses);
-}
-window.addEventListener("beforeunload", () => {
-	document.getElementById("expensesContainer").innerHTML = "";
-	document.getElementById("paidContainer").innerHTML = "";
+// const storedExpenses = localStorage.getItem("expenses");
+// if (storedExpenses) {
+// 	expenses = JSON.parse(storedExpenses);
+// }
+// window.addEventListener("beforeunload", () => {
+// 	document.getElementById("expensesContainer").innerHTML = "";
+// 	document.getElementById("paidContainer").innerHTML = "";
 
-	document.getElementById("totalUnpaid").innerText = "$0.00";
-	document.getElementById("totalPaid").innerText = "$0.00";
-});
+// 	document.getElementById("totalUnpaid").innerText = "$0.00";
+// 	document.getElementById("totalPaid").innerText = "$0.00";
+// });

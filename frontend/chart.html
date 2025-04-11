@@ -14,7 +14,13 @@
 	<body>
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">Logo</a>
+				<a class="navbar-brand" href="index.html"
+					><img
+						src="./images/ExpenseTrackerLogo.jpg"
+						alt="Expense Tracker Logo"
+						class="rounded-circle"
+						height="60px"
+				/></a>
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -39,7 +45,7 @@
 						<li class="nav-item">
 							<a class="nav-link active" href="chart.html">Chart</a>
 						</li>
-						<li class="nav-item dropdown">
+						<!-- <li class="nav-item dropdown">
 							<a
 								class="nav-link dropdown-toggle"
 								href="#"
@@ -72,12 +78,12 @@
 									>
 								</li>
 							</ul>
-						</li>
+						</li> -->
 						<li class="nav-item">
 							<a class="nav-link disabled" aria-disabled="true">Disabled</a>
 						</li>
 					</ul>
-					<form
+					<!-- <form
 						class="d-flex"
 						role="search"
 						onsubmit="event.preventDefault(); searchExpense()"
@@ -104,13 +110,15 @@
 						<button class="btn btn-outline-success" type="submit">
 							Search
 						</button>
-					</form>
+					</form> -->
 				</div>
 			</div>
 		</nav>
 		<!-- Expenses Chart -->
+		<div id="main" style="width: 100%; height: 400px"></div>
 
-		<div id="main" style="width: 100%; height: 600px"></div>
+		<!-- Pie Chart -->
+		<div id="pieChart" style="width: 100%; height: 400px"></div>
 	</body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="chart.js"></script>

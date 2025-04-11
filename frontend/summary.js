@@ -1,10 +1,5 @@
 let expenses = [];
-const storedExpenses = localStorage.getItem("expenses");
 const myModal = new bootstrap.Modal(document.getElementById("expenseModal"));
-
-if (storedExpenses) {
-	expenses = JSON.parse(storedExpenses);
-}
 
 function newExpense(id = null) {
 	if (id !== null) {
@@ -173,5 +168,16 @@ function summaryTable(filteredExpenses = expenses) {
 	});
 }
 
-summaryTable();
-filterCategory();
+// summaryTable();
+// filterCategory();
+window.onload = () => {
+	fetch("http://localhost:3000/expenses")
+		.then((response) => {
+			return response.json();
+		})
+		.then((data) => {
+			expenses = data;
+			summaryTable();
+			filterCategory();
+		});
+};
