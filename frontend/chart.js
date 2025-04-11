@@ -63,6 +63,5 @@ window.onload = () => {
 			expenses = data;
 			expensesChart();
 			expensesPieChart();
-			filterCategory();
 		});
 };

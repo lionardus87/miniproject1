@@ -19,20 +19,72 @@ function newExpense(id = null) {
 
 	myModal.toggle();
 }
-
-function deleteExpense(id) {
-	const index = expenses.findIndex((expense) => expense.id == id);
-	if (index != -1) {
-		expenses.splice(index, 1);
+function saveExpenses() {
+	const title = document.getElementById("formTitle").value;
+	const desc = document.getElementById("formDesc").value;
+	const amount = document.getElementById("formAmount").value;
+	const category = document.getElementById("formCategory").value;
+	if (editId !== null) {
+		fetch(`http://localhost:3000/expenses/${editId}`, {
+			method: "PUT",
+			body: JSON.stringify({ title, desc, amount, category }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((result) => result.json())
+			.then((editExpenses) => {
+				const index = expenses.findIndex((exp) => exp.id == editId);
+				expenses[index] = editExpenses;
+				summaryTable();
+			});
+	} else {
+		fetch("http://localhost:3000/expenses/new", {
+			method: "POST",
+			body: JSON.stringify({ title, desc, amount, category }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((result) => result.json())
+			.then((data) => {
+				expenses.push(data);
+				summaryTable();
+			});
 	}
-	expenses.forEach((exp, index) => {
-		exp.id = index + 1;
-	});
 
-	localStorage.setItem("expenses", JSON.stringify(expenses));
+	myModal.hide();
 	summaryTable();
 }
+// function deleteExpense(id) {
+// 	const index = expenses.findIndex((expense) => expense.id == id);
+// 	if (index != -1) {
+// 		expenses.splice(index, 1);
+// 	}
+// 	expenses.forEach((exp, index) => {
+// 		exp.id = index + 1;
+// 	});
 
+// 	// localStorage.setItem("expenses", JSON.stringify(expenses));
+// 	summaryTable();
+// }
+function deleteExpense(id) {
+	fetch(`http://localhost:3000/expenses/${id}`, {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	}).then(() => {
+		const index = expenses.findIndex((expense) => expense.id == id);
+		if (index != -1) {
+			expenses.splice(index, 1);
+		}
+		expenses.forEach((exp, index) => {
+			exp.id = index + 1;
+		});
+		summaryTable();
+	});
+}
 function paidExpense(id) {
 	const targetId = expenses.findIndex((expense) => expense.id == id);
 	const targetExpense = { ...expenses[targetId] };
@@ -40,10 +92,24 @@ function paidExpense(id) {
 	targetExpense.paidOn = targetExpense.issued
 		? new Date().toLocaleString()
 		: null;
-	expenses[targetId] = targetExpense;
+	// expenses[targetId] = targetExpense;
 
-	localStorage.setItem("expenses", JSON.stringify(expenses));
-	summaryTable();
+	// localStorage.setItem("expenses", JSON.stringify(expenses));
+	// summaryTable();
+	fetch(`http://localhost:3000/expenses/${id}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(targetExpense),
+	})
+		.then((res) => res.json())
+		.then((data) => {
+			expenses[targetId] = data;
+			summaryTable();
+			// console.log(data);
+		})
+		.catch((error) => console.error(error));
 }
 
 function filterCategory() {
@@ -168,8 +234,6 @@ function summaryTable(filteredExpenses = expenses) {
 	});
 }
 
-// summaryTable();
-// filterCategory();
 window.onload = () => {
 	fetch("http://localhost:3000/expenses")
 		.then((response) => {

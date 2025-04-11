@@ -44,77 +44,78 @@
 						<li class="nav-item">
 							<a class="nav-link" href="chart.html">Chart</a>
 						</li>
-						<li class="nav-item dropdown">
-							<a
-								class="nav-link dropdown-toggle"
-								href="#"
-								role="button"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							>
-								Category
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a class="dropdown-item" data-category="utilities"
-										>Utilities</a
-									>
-								</li>
-								<li>
-									<a class="dropdown-item" data-category="entertainment"
-										>Entertainment</a
-									>
-								</li>
-								<li>
-									<a class="dropdown-item" data-category="groceries"
-										>Groceries</a
-									>
-								</li>
-								<li><hr class="dropdown-divider" /></li>
-								<li>
-									<a class="dropdown-item" data-category="allCategories"
-										>All Categories</a
-									>
-								</li>
-							</ul>
-						</li>
-						<!-- <li class="nav-item">
-							<a class="nav-link disabled" aria-disabled="true">Disabled</a>
-						</li> -->
 					</ul>
-					<form
-						class="d-flex"
-						role="search"
-						onsubmit="event.preventDefault(); searchExpense()"
-					>
-						<select
-							id="sortOptions"
-							class="form-select w-auto"
-							onchange="sortExpenses()"
-						>
-							<option value="default">Sort By</option>
-							<option value="price-low-high">Price: Low to High</option>
-							<option value="price-high-low">Price: High to Low</option>
-							<option value="title-asc">Title: A to Z</option>
-							<option value="title-desc">Title: Z to A</option>
-						</select>
-
-						<input
-							id="searchInput"
-							class="form-control me-2"
-							type="search"
-							placeholder="Search"
-							aria-label="Search"
-						/>
-						<button class="btn btn-outline-success" type="submit">
-							Search
-						</button>
-					</form>
 				</div>
 			</div>
 		</nav>
+
+		<!-- Filter & Category -->
+		<div class="container mt-4">
+			<div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+				<!-- Category -->
+				<div class="dropdown">
+					<button
+						class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+						href="#"
+						role="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+					>
+						Category
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a class="dropdown-item" data-category="utilities">Utilities</a>
+						</li>
+						<li>
+							<a class="dropdown-item" data-category="entertainment"
+								>Entertainment</a
+							>
+						</li>
+						<li>
+							<a class="dropdown-item" data-category="groceries">Groceries</a>
+						</li>
+						<li><hr class="dropdown-divider" /></li>
+						<li>
+							<a class="dropdown-item" data-category="allCategories"
+								>All Categories</a
+							>
+						</li>
+					</ul>
+				</div>
+				<!-- Sort feature -->
+				<select
+					id="sortOptions"
+					class="form-select w-auto"
+					onchange="sortExpenses()"
+				>
+					<option value="default">Sort By</option>
+					<option value="price-low-high">Price: Low to High</option>
+					<option value="price-high-low">Price: High to Low</option>
+					<option value="title-asc">Title: A to Z</option>
+					<option value="title-desc">Title: Z to A</option>
+				</select>
+				<!-- Search Button -->
+				<form
+					class="d-flex ms-auto"
+					role="search"
+					onsubmit="event.preventDefault(); searchExpense()"
+				>
+					<input
+						id="searchInput"
+						class="form-control me-2"
+						type="search"
+						placeholder="Search"
+						aria-label="Search"
+					/>
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+		</div>
+
 		<!-- Expenses Table -->
 		<div class="container mt-4">
+			<h2>Unpaid Expenses</h2>
 			<table class="table table-bordered text-center">
 				<thead class="table-dark">
 					<tr>
@@ -140,6 +141,7 @@
 		</div>
 
 		<div class="container">
+			<h2>Paid Expenses</h2>
 			<table class="table table-bordered text-center">
 				<thead class="table-dark">
 					<tr>
@@ -182,7 +184,7 @@
 					/>
 				</td>
 				<td>
-					<button id="editExpense">Update</button>
+					<button id="editExpense">Edit</button>
 					<button id="delExpense">Delete</button>
 				</td>
 			</tr>

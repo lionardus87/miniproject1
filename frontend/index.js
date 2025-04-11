@@ -29,48 +29,35 @@ function saveExpenses() {
 	const desc = document.getElementById("formDesc").value;
 	const amount = document.getElementById("formAmount").value;
 	const category = document.getElementById("formCategory").value;
+	if (editId !== null) {
+		fetch(`http://localhost:3000/expenses/${editId}`, {
+			method: "PUT",
+			body: JSON.stringify({ title, desc, amount, category }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((result) => result.json())
+			.then((editExpenses) => {
+				const index = expenses.findIndex((exp) => exp.id == editId);
+				expenses[index] = editExpenses;
+				countExpenses();
+			});
+	} else {
+		fetch("http://localhost:3000/expenses/new", {
+			method: "POST",
+			body: JSON.stringify({ title, desc, amount, category }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((result) => result.json())
+			.then((data) => {
+				expenses.push(data);
+				countExpenses();
+			});
+	}
 
-	fetch("http://localhost:3000/expenses/new", {
-		method: "POST",
-		body: JSON.stringify({ title, desc, amount, category }),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-		.then((result) => result.json())
-		.then((data) => {
-			expenses.push(data);
-			countExpenses();
-		});
-	// if (!title || !desc || !amount || !category) {
-	// 	alert("All fields are required");
-	// 	return;
-	// }
-	// if (editId !== null) {
-	// 	const index = expenses.findIndex((exp) => exp.id === editId);
-	// 	expenses[index].title = title;
-	// 	expenses[index].desc = desc;
-	// 	expenses[index].amount = amount;
-	// 	expenses[index].category = category;
-	// } else {
-	// 	// Create new task
-	// 	const id =
-	// 		expenses.length === 0
-	// 			? 1
-	// 			: Math.max(...expenses.map((exp) => exp.id)) + 1;
-	// 	const expense = {
-	// 		id,
-	// 		title,
-	// 		desc,
-	// 		amount,
-	// 		category,
-	// 		date: new Date().toLocaleString(),
-	// 		issued: false,
-	// 		paidOn: null,
-	// 	};
-	// 	expenses.push(expense);
-	// }
-	// localStorage.setItem("expenses", JSON.stringify(expenses));
 	myModal.hide();
 	countExpenses();
 }
@@ -187,9 +174,9 @@ function countExpenses(data = expenses) {
 		).toFixed(2);
 		template.getElementById("category").textContent = expense.category;
 
-		const checkbox = template.getElementById("paidExpense");
-		checkbox.checked = expense.issued;
-		checkbox.addEventListener("click", () => paidExpense(expense.id));
+		// const checkbox = template.getElementById("paidExpense");
+		// checkbox.checked = expense.issued;
+		// checkbox.addEventListener("click", () => paidExpense(expense.id));
 
 		template
 			.getElementById("editExpense")
@@ -201,8 +188,6 @@ function countExpenses(data = expenses) {
 		container.appendChild(template);
 	});
 }
-// countExpenses()
-// filterCategory()
 window.onload = () => {
 	fetch("http://localhost:3000/expenses")
 		.then((response) => {
@@ -214,15 +199,3 @@ window.onload = () => {
 			filterCategory();
 		});
 };
-
-// const storedExpenses = localStorage.getItem("expenses");
-// if (storedExpenses) {
-// 	expenses = JSON.parse(storedExpenses);
-// }
-// window.addEventListener("beforeunload", () => {
-// 	document.getElementById("expensesContainer").innerHTML = "";
-// 	document.getElementById("paidContainer").innerHTML = "";
-
-// 	document.getElementById("totalUnpaid").innerText = "$0.00";
-// 	document.getElementById("totalPaid").innerText = "$0.00";
-// });

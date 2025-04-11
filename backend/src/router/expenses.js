@@ -4,6 +4,7 @@ const {
 	getExpenses,
 	addAExpense,
 	delExpById,
+	getExpById,
 } = require("../controller/expenses");
 
 router.get("/", (req, res) => {
@@ -25,5 +26,13 @@ router.delete("/:id", (req, res) => {
 		res.send(403);
 	}
 });
-
+router.put("/:id", (req, res) => {
+	const id = req.params.id;
+	const updated = req.body;
+	const editExpense = getExpById(id, updated);
+	if (!editExpense) {
+		return res.status(404);
+	}
+	res.json(editExpense);
+});
 module.exports = router;

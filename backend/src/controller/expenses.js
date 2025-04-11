@@ -28,14 +28,24 @@ const getExpenses = () => {
 	return getAllExpenses();
 };
 
+const getExpById = (id, edit) => {
+	const allExpenses = getAllExpenses();
+	const index = allExpenses.findIndex((exp) => exp.id == id);
+	if (index === -1) return null;
+	allExpenses[index] = { ...allExpenses[index], ...edit };
+	return allExpenses[index];
+};
 const delExpById = (id) => {
 	const target = getAllExpenses().find((exp) => exp.id == id);
 	if (target) {
 		delExpense(id);
+		return true;
 	}
+	return false;
 };
 module.exports = {
 	getExpenses,
 	addAExpense,
 	delExpById,
+	getExpById,
 };
