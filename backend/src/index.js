@@ -7,17 +7,6 @@ const expRouter = require("./router/expenses");
 app.use(cors());
 app.use(express.json());
 
-// const data = [
-// 	{
-// 		name: "John",
-// 		place: "Sydney",
-// 	},
-// ];
-
-// app.get("/", (req, res) => {
-// 	res.json(data); // Respond with JSON
-// });
-
 app.use("/expenses", expRouter);
 
 app.listen(port, () => {
